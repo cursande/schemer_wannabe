@@ -1,4 +1,4 @@
-remote repo for examples/key notes
+remote repo for examples, key notes and answers to exercises
 
 To run scheme files in repl:
 ``` shell
