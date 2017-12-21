@@ -4,8 +4,6 @@
 
 ;; Basic Procedures
 
-;; Compound procedures are used in the exact same way as primitive procedures (+, -,...)
-
 ;; Squaring ->
 (define (square x) (* x x))
    
@@ -14,6 +12,8 @@
 
 ;; or if it's clearer...
 (define square (lambda (x) (* x x))) ;lambda tells lisp 'this is a procedure'. Above is just syntactic sugar
+
+;; Compound procedures are used in the exact same way as primitive procedures (+, -,...)
 
 ;; Sum-of-squares (nested procedure) -> 
 (define (sum-of-squares x y) 
@@ -47,3 +47,16 @@
 
 ;;  Each pair of expressions after cond are clauses:
 ;;	- first expression is a predicate, value = true or false
+
+; logical composition operations = (and, or, not)
+;	subexpressions in and and not are not necessarily evaluated, it will only evaluate what it needs to work out true or false
+
+(and (> x 5) (< x 10)) ; 5 < x < 10
+
+(define (>= x y)
+  (or (> x y) (= x y))); is one number greater than another?
+
+;; or alternatively
+
+(define (>= x y)
+  (not (< x y)))

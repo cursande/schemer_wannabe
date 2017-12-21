@@ -1,4 +1,4 @@
-remote repo for examples, key notes and answers to exercises
+remote repo for examples, key notes and answers to exercises in SICP
 
 To run scheme files in repl:
 ``` shell
