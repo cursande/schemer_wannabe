@@ -28,3 +28,18 @@
 
 (/ (+ 5 4 (- 2 (- 3 (+ 6 0.8))))
    (* 3 (- 6 2) (- 2 7))) 
+
+;; *1.3*
+
+(define (sum-of-squares x y z)
+  (+ (* x x) (* y y) (* z z))) 
+
+;; *1.4*
+
+; Add b's absolute value to a
+
+;; *1.5*
+
+; Applicative: the interpreter will attempt to evaluate (p) as an operand before applying the procedure, and it won't know what to do
+
+; Normal-order: the interpreter would simply sub in 0 and (p) and, since the first condition in the if statement will be true, it will return 0 as (p) won't matter
