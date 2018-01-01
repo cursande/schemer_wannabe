@@ -43,3 +43,7 @@
 ; Applicative: the interpreter will attempt to evaluate (p) as an operand before applying the procedure, and it won't know what to do
 
 ; Normal-order: the interpreter would simply sub in 0 and (p) and, since the first condition in the if statement will be true, it will return 0 as (p) won't matter
+
+;; *1.6*
+
+; After testing it out, it gets stuck in an infinite loop. If statements are special in that they evaluate either the then or else clauses...with the new-if function though, scheme will try and evaluate the else statement regardless of whether the predicate's conditions are met. So it will just keep running sqrt-iter over and over

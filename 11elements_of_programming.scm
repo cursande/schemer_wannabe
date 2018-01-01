@@ -60,3 +60,23 @@
 
 (define (>= x y)
   (not (< x y)))
+
+
+;; Mathematical functions vs. computer procedures: procedures must be effective
+
+;; finding a square root
+
+(define (sqrt (sqrt-iter guess x) ;to be repeatedly called until guess is 'good enough' as defined below
+  (if (good-enough? guess x)
+      guess
+      (sqrt-iter (improve guess x)
+                 x)))
+
+(define (improve guess x) ;to gradually improve the guess via successive approximations
+  (average guess (/ x guess)))
+
+(define (good-enough? guess x) ;to test whether the guess is accurate enough
+  (< (abs (- (square guess) x)) 0.001))
+
+(define (sqrt x) ;to start the sqrt-iter 'loop', with an initial guess of 1
+  (sqrt-iter 1.0 x))
