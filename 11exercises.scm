@@ -34,9 +34,9 @@
 (define (square x) (* x x))
 
 (define (sum-of-squares x y z) ; work out which is the smallest number, and add the squares of the other two
-  (cond ((and (< x y) (< x z)) (+ (* square y) (* square z)))
-        ((and (< y x) (< y z)) (+ (* square x) (* square z)))
-        ((and (< z x) (< z y)) (+ (* square x) (* square y)))))	
+  (cond ((and (< x y) (< x z)) (+ (square y) (square z)))
+        ((and (< y x) (< y z)) (+ (square x) (square z)))
+        ((and (< z x) (< z y)) (+ (square x) (square y)))))	
 
 ;; *1.4*
 
