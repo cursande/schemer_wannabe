@@ -31,18 +31,10 @@
 
 ;; *1.3*
 
-(define (sum-of-squares x y z)
-  (+ (* x x) (* y y) (* z z)))
-
 (define (sum-of-squares x y z) ; work out which is the smallest number, and add the squares of the other two
   (cond ((and (< x y) (< x z)) (+ (* y y) (* z z)))
         ((and (< y x) (< y z)) (+ (* x x) (* z z)))
         ((and (< z x) (< z y)) (+ (* x x) (* y y))) 
-
-
-(cond ((> x 0) x)
-	((= x 0) 0)
-	((< x 0) (- x)))
 
 ;; *1.4*
 
