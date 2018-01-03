@@ -51,3 +51,28 @@
 ;; *1.6*
 
 ; After testing it out, it gets stuck in an infinite loop. If statements are special in that they evaluate either the then or else clauses...with the new-if function though, scheme will try and evaluate the else statement regardless of whether the predicate's conditions are met. So it will just keep running sqrt-iter over and over
+
+;; *1.7*
+
+(define (sqrt (sqrt-iter guess x)
+  (if (good-enough? guess x)
+      guess
+      (sqrt-iter (improve guess x)
+                 x)))
+
+(define (improve guess x) 
+  (average guess (/ x guess)))
+
+
+
+(define (good-enough? guess x) 
+  (< (abs (- (square guess) x)) 0.001))
+
+(define (sqrt x)
+  (sqrt-iter 1.0 x))
+
+(display (sqrt 0.000001))
+;should be 0.001
+
+(sqrt 99999999999)
+;should be 316227.766015257
