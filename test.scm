@@ -1,24 +1,24 @@
-(define (sqrt-iter guess old-guess x) ;to be repeatedly called until guess is 'good enough' as defined below
+(define (sqrt-iter guess old-guess x)
   (if (good-enough-improved guess old-guess)
       guess
-      (sqrt-iter guess
-		 (improve guess x)
+      (sqrt-iter (improve guess x)
+                 guess
                  x)))
 
-(define (improve guess x) ;to gradually improve the guess via successive approximations
+(define (improve guess x)
   (average guess (/ x guess)))
 
-(define (average x y) ;to find average of guess and previous guess
+(define (average x y)
   (/ (+ x y) 2))
 
-(define (good-enough-improved guess old-guess) ; to test difference between new and old guess, stopping if the difference is a very small fraction of the guess
-  (< (/ (abs (- old-guess guess)) guess)
-     (/ 0.0001 guess)))
+(define (good-enough-improved guess old-guess) ; check if difference between guesses is a tiny fraction of the guess
+  (< (abs (- old-guess guess))
+     (/ guess 100000)))
 
-(define (sqrt x) ;to start the sqrt-iter 'loop', give it two guesses as parameters and the number whose square root we want to find
-  (sqrt-iter 1 2 x))
+(define (sqrt x)
+  (sqrt-iter 1.0 2.0 x))
 
-(sqrt 0.000001)
+;(sqrt 0.000001)
 
 (sqrt 1000000000000)
 

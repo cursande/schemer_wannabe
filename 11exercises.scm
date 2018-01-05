@@ -78,4 +78,9 @@
 (sqrt 10000000000000)
 ;should be 3162277.660..., however, scheme gets stuck in a loop. I believe this is because it hits a point where it alternates between two guesses that aren't 'good enough'.
 
-; Alternate strategy:
+; Alternate strategy for good-enough?:
+(define (good-enough-improved guess old-guess) ; check if difference between guesses is a tiny fraction of the guess
+  (< (abs (- old-guess guess))
+     (/ guess 100000)))
+
+
