@@ -1,12 +1,16 @@
-(define (sqrt-iter guess old-guess x)
+
+(define (square x) (* x x))
+
+(define (cbrt-iter guess old-guess x)
   (if (good-enough-improved guess old-guess)
       guess
-      (sqrt-iter (improve guess x)
+      (cbrt-iter (improve guess x)
                  guess
                  x)))
 
 (define (improve guess x)
-  (average guess (/ x guess)))
+  (/ (+ (/ x (square guess)) (* 2 guess))
+     3))
 
 (define (average x y)
   (/ (+ x y) 2))
@@ -15,10 +19,10 @@
   (< (abs (- old-guess guess))
      (/ guess 100000)))
 
-(define (sqrt x)
-  (sqrt-iter 1.0 2.0 x))
+(define (cbrt x)
+  (cbrt-iter 1.0 2.0 x))
 
 ;(sqrt 0.000001)
 
-(sqrt 1000000000000)
+(cbrt 1000000000000)
 

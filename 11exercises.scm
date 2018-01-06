@@ -83,4 +83,10 @@
   (< (abs (- old-guess guess))
      (/ guess 100000)))
 
+;; *1.8*
+
+(define (improve guess x) ; new improve method for finding cube roots
+  (/ (+ (/ x (square guess)) (* 2 guess))
+     3))
+
 
