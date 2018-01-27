@@ -83,3 +83,20 @@
 
 (define (sqrt x) ;to start the sqrt-iter 'loop', with an initial guess of 1
   (sqrt-iter 1.0 x))
+
+;; Decomposing procedure into subprocedure mirrors problem decomposition, yet a user or another programmer shouldn't need to know how the procedure is implemented to use it.
+
+;; Bound variables vs. free variables: bound variable is the formal paramters of just the current procedures, meaning we can localise a 'sub' procedure and only worry about the level of abstraction that matters to us. Variables that are 'free' are either global or defined a level or more up within a procedure. 
+
+;; So... the above method for find square roots in a block structure:
+(define (sqrt x)
+  (define (good-enough? guess)
+    (< (abs (- (square guess) x)) 0.001))
+  (define (improve guess)
+    (average guess (/ x guess)))
+  (define (sqrt-iter guess)
+    (if (good-enough? guess)
+      guess
+      (sqrt-iter (improve guess))))
+  (sqrt-iter 1.0)) ; where each name is packaged within its own definition, and x can be a free variable inside sqrt, which doesn't have to be explicitly passed (lexical scoping)
+
