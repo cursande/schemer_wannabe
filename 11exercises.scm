@@ -89,4 +89,8 @@
   (/ (+ (/ x (square guess)) (* 2 guess))
      3))
 
+;; *1.9*
+
+; The first is recursive, the second is iterative as the variables are simply updated state to state. If I stop the process at some point in the middle, I can simply continue it by running the process with the variables saved at that last point in time.
+
 
