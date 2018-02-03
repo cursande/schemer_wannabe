@@ -1,5 +1,5 @@
 
-; ammount: number of ways to make a dollar
+; ammount: the value you are trying to make with change
 (define (count-change amount)
   (cc amount 5))
 
@@ -13,7 +13,7 @@
                         (first-denomination kinds-of-coins))
                      kinds-of-coins)))))
 
-; first-denomination: proc that takes in the number of coins still availabe, and returns the first coin that's still available
+; first-denomination: proc that takes in the number of coins still available, and returns the first coin that's still available
 (define (first-denomination kinds-of-coins)
   (cond ((= kinds-of-coins 1) 1)
         ((= kinds-of-coins 2) 5)
@@ -23,4 +23,5 @@
                                
 
 (count-change 100)
-
+(count-change 50)
+(count-change 20)
