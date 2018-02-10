@@ -1,27 +1,12 @@
 
-; ammount: the value you are trying to make with change
-(define (count-change amount)
-  (cc amount 5))
+;	 { n     if n < 3 }
+; f(n) = 
+;        { f(n - 1) + 2f(n - 2) + 3f(n - 3)     if n >= 3) }
 
-; kinds-of-coins: different coins and their values
-(define (cc amount kinds-of-coins)
-  (cond ((= amount 0) 1)
-        ((or (< amount 0) (= kinds-of-coins 0)) 0)
-        (else (+ (cc amount
-                     (- kinds-of-coins 1))
-                 (cc (- amount
-                        (first-denomination kinds-of-coins))
-                     kinds-of-coins)))))
 
-; first-denomination: proc that takes in the number of coins still available, and returns the first coin that's still available
-(define (first-denomination kinds-of-coins)
-  (cond ((= kinds-of-coins 1) 1)
-        ((= kinds-of-coins 2) 5)
-        ((= kinds-of-coins 3) 10)
-        ((= kinds-of-coins 4) 25)
-        ((= kinds-of-coins 5) 50)))
-                               
 
-(count-change 100)
-(count-change 50)
-(count-change 20)
+ (define (f n)
+  (cond ((< n 3) n)
+	(else (+ (f (- n 1))
+		 (* 2 (f (- n 2))
+		 (* 3 (f (- n 3))))))))
