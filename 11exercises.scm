@@ -145,3 +145,18 @@
 	(else (+ (pascal (- r 1) (- c 1))
 		 (pascal (- r 1) c))))) ; like fib, work back recursively to the beginning, and then sub the right values in
 
+;; *1.15*
+
+ (define angle)
+  (if (not (> (abs angle) 0.1)) ; check angle is larger than 0.1 
+           angle
+           (p (sine (/ angle 3.0)))) ; p isn't done until angle is already smaller than 0.1!
+
+(/ 12.15 3) ; => 4.05
+(/ 4.05 3) ; => 1.3499999999999999
+(/ 1.3499999999999999 3) ; => .44999999999999996
+(/ .44999999999999996 3) ; => 0.15
+(/ 0.15 3) ; = 0.049999999999999996
+
+; p gets applied 5 times
+

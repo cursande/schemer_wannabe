@@ -1,12 +1,11 @@
 
-; Pascal's triangle / binomial coefficients
+(define (cube x) (* x x x))
 
-; recursive process 
+(define (p x) (- (* 3 x) (* 4 (cube x))))
 
-(define (pascal r c) ; r = rows, c = col
-  (cond ((= c 1) 1) 
-	((= c r) 1) ; first col always 1, final column (equal to current row) always 1 as well
-	(else (+ (pascal (- r 1) (- c 1))
-		 (pascal (- r 1) c))))) ; like fib, work back recursively to the beginning, and then sub the right values in
+(define (sine angle)
+  (if (not (> (abs angle) 0.1)) ; 
+	   angle
+	   (p (sine (/ angle 3.0))))) ; procedure will only return angle if angle is already smaller than 0.1!
 
 
