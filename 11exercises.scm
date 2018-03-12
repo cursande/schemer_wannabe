@@ -162,4 +162,4 @@
 
 ; *(b)
 ; if we take n to be the number of times p must be processed in sine, then we have to run p again everytime n is 3 times bigger, as above.
-; so the order of growth for f(a) is O(log3n) it seems (https://stackoverflow.com/questions/20512642/big-o-confusion-log2n-vs-log3n)
+; so the order of growth for f(a) is O(log n) it seems, as constants don't matter (https://stackoverflow.com/questions/20512642/big-o-confusion-log2n-vs-log3n)
