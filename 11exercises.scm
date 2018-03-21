@@ -163,3 +163,15 @@
 ; *(b)
 ; if we take n to be the number of times p must be processed in sine, then we have to run p again everytime n is 3 times bigger, as above.
 ; so the order of growth for f(a) is O(log n) it seems, as constants don't matter (https://stackoverflow.com/questions/20512642/big-o-confusion-log2n-vs-log3n)
+
+;; *1.16*
+
+(define (square x) (* x x))
+
+(define (fast-expt b n)
+  (fast-expt-iter b n 1)) ; a = 1 at the beginning of the process
+
+(define (fast-expt-iter b n a) ; iterative exponentiation
+  (cond ((= n 0) a) ; result (a) at the end of the process
+        ((even? n) (fast-expt-iter (square b) (/ n 2) a)) ; if n is even we can just square b and halve n instead of decrementing
+        (else (fast-expt-iter b (- n 1) (* a b))))) ; otherwise get the product of a and b and decrement n
