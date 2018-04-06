@@ -175,3 +175,14 @@
   (cond ((= n 0) a) ; result (a) at the end of the process
         ((even? n) (fast-expt-iter (square b) (/ n 2) a)) ; if n is even we can just square b and halve n instead of decrementing
         (else (fast-expt-iter b (- n 1) (* a b))))) ; otherwise get the product of a and b and decrement n
+
+;; *1.17*
+
+(define (double x) (+ x x))
+
+(define (halve x) (/ x 2)) ; only for even numbers
+
+(define (* a b)
+  (cond ((= a 0) 0) ; a is our counter/iterator, b is result
+	((even? a) (* (halve a) (double b))) ; e.g. 6 * 6 = 3 * 12
+	(else (+ b (* (- a 1) b))))) ; e.g. 3 * 12 = 12 + 2 * 12, makes a even again. Eventually you're left with 36 + 0 * 36 = 36
