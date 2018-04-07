@@ -186,3 +186,13 @@
   (cond ((= a 0) 0) ; a is our counter/iterator, b is result
 	((even? a) (* (halve a) (double b))) ; e.g. 6 * 6 = 3 * 12
 	(else (+ b (* (- a 1) b))))) ; e.g. 3 * 12 = 12 + 2 * 12, makes a even again. Eventually you're left with 36 + 0 * 36 = 36
+
+;; *1.18*
+
+(define (* a b)
+  (*-iter a b 0))
+
+(define (*-iter a b n) ; a is counter, b tracks multiplier, n tracks total sum/result
+  (cond ((= a 0) n)
+	((even? a) (*-iter (halve a) (double b) n))
+	(else (*-iter (- a 1) b (+ b n)))))
