@@ -1,38 +1,61 @@
-; Exercise 1.18. Using the results of exercises 1.16 and 1.17, devise a procedure that generates an
-; iterative process for multiplying two integers in terms of adding, doubling, and halving and uses a
-; logarithmic number of steps.
+; Exercise 1.19. There is a clever algorithm for computing the Fibonacci numbers in a logarithmic
+; number of steps. 
 
-;; *1.16*
+; Recall the transformation of the state variables a and b in the fib-iter process of
+; section 1.2.2: a a + b and b a. Call this transformation T, and observe that applying T over and
+; over again n times, starting with 1 and 0, produces the pair Fib(n + 1) and Fib(n). In other words, the
+; Fibonacci numbers are produced by applying T n , the nth power of the transformation T, starting with
+; the pair (1,0). 
 
-; (define (square x) (* x x))
+; Now consider T to be the special case of p = 0 and q = 1 in a family of transformations
+; T pq, where T pq transforms the pair (a,b) according to a bq + aq + ap and b bp + aq. Show that if
+; we apply such a transformation T pq twice, the effect is the same as using a single transformation T p’q’
+; of the same form, and compute p’ and q’ in terms of p and q. 
 
-; (define (fast-expt b n)
-;   (fast-expt-iter b n 1)) ; a = 1 at the beginning of the process
+; Tpq
 
-; (define (fast-expt-iter b n a) ; iterative exponentiation
-;   (cond ((= n 0) a) ; result (a) at the end of the process
-;         ((even? n) (fast-expt-iter (square b) (/ n 2) a)) ; if n is even we can just square b and halve n instead of decrementing
-;         (else (fast-expt-iter b (- n 1) (* a b))))) ; otherwise get the product of a and b and decrement n
+; a <- bq + aq + ap 
+; b <- bp + aq
 
-; (define (double x) (+ x x))
+; successive squaring: find the 'square' of Tpq by subbing in first iteration into the next one 
 
-; (define (halve x) (/ x 2)) ; only for even numbers
+; a <- (bp + aq)q + (bq + aq + ap)q + (bq + aq + ap)p
+; b <- (bp + aq)p + (bq + aq + ap)q
 
-; (define (* a b)
-;   (cond ((= a 0) 0) ; a is our counter/iterator, b is result
-; 	((even? a) (* (halve a) (double b))) ; e.g. 6 * 6 = 3 * 12
-; 	(else (+ b (* (- a 1) b))))) ; e.g. 3 * 12 = 12 + 2 * 12, makes a even again. Eventually you're left with 36 + 0 * 36 = 36
-;; *1.18*
+; then it's a matter of manipulating the above to be written as Tpq again..
 
-(define (double x) (+ x x))
+; a: bpq + aq^2 + bqq + aq^2 + apq + bqp + aqp + ap^2
+; => b(pq + q^2 + qp) + a(q^2 + pq + qp) + a(q^2 + p^2)
+; => b(q^2 + 2pq) + a(2pq + q^2) + a(p^2 + q^2)
 
-(define (halve x) (/ x 2)) ; only for even numbers
+; b: bp^2 + aqp + bq^2 + aq^2 + apq
+; => (bp^2 + q^2) + (2apq + aq^2)
+; => b(p^2 + q^2) + a(2pq + q^2)
 
-(define (* a b)
-  (*-iter a b 0))
+; so squared form of Tpq is...
 
-(define (*-iter a b n) ; a is counter, b tracks multiplier, n tracks total sum/result
-  (cond ((= a 0) n)
-	((even? a) (*-iter (halve a) (double b) n))
-	(else (*-iter (- a 1) b (+ b n)))))
+;p' = p^2 + q^2
+;q' = 2pq + q^2
 
+; This gives us an explicit way to square these transformations, and thus we can compute T n using successive squaring, as in the fast-expt
+; procedure. Put this all together to complete the following procedure, which runs in a logarithmic
+; number of steps: 
+
+(define (square x) (* x x))
+
+(define (fib n)
+  (fib-iter 1 0 0 1 n))
+
+(define (fib-iter a b p q count)
+  (cond ((= count 0) b)
+	((even? count)
+	 (fib-iter a
+		   b
+		   (+ (square p) (square q)) ; a <- bq + aq + ap squared, transformation like in fast-expt
+		   (+ (* 2 p q) (square q)) ; b <- bp + aq squared
+		   (/ count 2)))
+	(else (fib-iter (+ (* b q) (* a q) (* a p))
+			(+ (* b p) (* a q))
+			p
+			q
+			(- count 1)))))
