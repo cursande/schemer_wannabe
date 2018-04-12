@@ -237,8 +237,8 @@
 	((even? count)
 	 (fib-iter a
 		   b
-		   (+ (square p) (square q)) ; a <- bq + aq + ap squared, transformation like in fast-expt
-		   (+ (* 2 p q) (square q)) ; b <- bp + aq squared
+		   (+ (square p) (square q)) ; p squared, transformation like in fast-expt
+		   (+ (* 2 p q) (square q)) ; q squared
 		   (/ count 2)))
 	(else (fib-iter (+ (* b q) (* a q) (* a p))
 			(+ (* b p) (* a q))
