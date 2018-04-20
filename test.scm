@@ -1,61 +1,45 @@
-; Exercise 1.19. There is a clever algorithm for computing the Fibonacci numbers in a logarithmic
-; number of steps. 
 
-; Recall the transformation of the state variables a and b in the fib-iter process of
-; section 1.2.2: a a + b and b a. Call this transformation T, and observe that applying T over and
-; over again n times, starting with 1 and 0, produces the pair Fib(n + 1) and Fib(n). In other words, the
-; Fibonacci numbers are produced by applying T n , the nth power of the transformation T, starting with
-; the pair (1,0). 
+(define (gcd a b)
+  (if (= b 0)
+      a
+      (gcd b (remainder a b))))
 
-; Now consider T to be the special case of p = 0 and q = 1 in a family of transformations
-; T pq, where T pq transforms the pair (a,b) according to a bq + aq + ap and b bp + aq. Show that if
-; we apply such a transformation T pq twice, the effect is the same as using a single transformation T p’q’
-; of the same form, and compute p’ and q’ in terms of p and q. 
+;; Exercise 1.20. The process that a procedure generates is of course dependent on the rules used by the
+;; interpreter. As an example, consider the iterative gcd procedure given above. Suppose we were to
+;; interpret this procedure using normal-order evaluation, as discussed in section 1.1.5. (The normal-order-evaluation rule for if is described in
+;; exercise 1.5.) Using the substitution method (for normal order), illustrate the process generated in evaluating (gcd 206 40) and indicate the remainder operations that are actually performed. How many remainder operations are actually
+;; performed in the normal-order evaluation of (gcd 206 40)? In the applicative-order evaluation?
 
-; Tpq
+; in normal order eval the substitution model is used, the program has to 'store up' each recursive call until it finally needs to evaluate it e.g. when b = 0
+; e.g.
 
-; a <- bq + aq + ap 
-; b <- bp + aq
+(gcd 40 (remainder 206 40))
+; a = 40
+; b = (remainder 206 40)
 
-; successive squaring: find the 'square' of Tpq by subbing in first iteration into the next one 
+; so on the next call to gcd...
+(gcd (remainder 206 40)
+     (remainder 40 (remainder 206 40)))
+; a = (remainder 206 40)
+; b = (remainder 40 (remainder 206 40))
 
-; a <- (bp + aq)q + (bq + aq + ap)q + (bq + aq + ap)p
-; b <- (bp + aq)p + (bq + aq + ap)q
+; We also call remainder when checking that b = 0..
 
-; then it's a matter of manipulating the above to be written as Tpq again..
+; it would take many calls to remainder to eventually return a in normal-order eval.
+; For now I cannot be bothered working out exactly how many.
 
-; a: bpq + aq^2 + bqq + aq^2 + apq + bqp + aqp + ap^2
-; => b(pq + q^2 + qp) + a(q^2 + pq + qp) + a(q^2 + p^2)
-; => b(q^2 + 2pq) + a(2pq + q^2) + a(p^2 + q^2)
+; The difference between this and applicative-order eval is that (remainder a b) will be evaluated each time it's called, so it doesn't keep stacking up.
+; each new call to gcd just has the new values for a and b e.g.
 
-; b: bp^2 + aqp + bq^2 + aq^2 + apq
-; => (bp^2 + q^2) + (2apq + aq^2)
-; => b(p^2 + q^2) + a(2pq + q^2)
+(gcd 206 40)
+; => (gcd 40 (remainder 206 40))
+(gcd 6 40)
+; => (gcd 6 (remainder 40 6))
+(gcd 6 4)
+; => (gcd 4 (remainder 6 4))
+(gcd 4 2)
+; => (gcd 2 (remainder 4 2))
+(gcd 2 0)
+; => 2
 
-; so squared form of Tpq is...
-
-;p' = p^2 + q^2
-;q' = 2pq + q^2
-
-; This gives us an explicit way to square these transformations, and thus we can compute T n using successive squaring, as in the fast-expt
-; procedure. Put this all together to complete the following procedure, which runs in a logarithmic
-; number of steps: 
-
-(define (square x) (* x x))
-
-(define (fib n)
-  (fib-iter 1 0 0 1 n))
-
-(define (fib-iter a b p q count)
-  (cond ((= count 0) b)
-	((even? count)
-	 (fib-iter a
-		   b
-		   (+ (square p) (square q)) ; p squared, transformation like in fast-expt
-		   (+ (* 2 p q) (square q)) ; q squared
-		   (/ count 2)))
-	(else (fib-iter (+ (* b q) (* a q) (* a p))
-			(+ (* b p) (* a q))
-			p
-			q
-			(- count 1)))))
+; so it's just the 4 remainder operations here.

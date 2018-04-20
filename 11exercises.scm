@@ -245,3 +245,40 @@
 			p
 			q
 			(- count 1)))))
+
+
+;; *1.20*
+
+; in normal order eval the substitution model is used, the program has to 'store up' each recursive call until it finally needs to evaluate it e.g. when b = 0
+; e.g.
+
+(gcd 40 (remainder 206 40))
+; a = 40
+; b = (remainder 206 40)
+
+; so on the next call to gcd...
+(gcd (remainder 206 40)
+     (remainder 40 (remainder 206 40)))
+; a = (remainder 206 40)
+; b = (remainder 40 (remainder 206 40))
+
+; We also call remainder when checking that b = 0..
+
+; it would take many calls to remainder to eventually return a in normal-order eval.
+; For now I cannot be bothered working out exactly how many.
+
+; The difference between this and applicative-order eval is that (remainder a b) will be evaluated each time it's called, so it doesn't keep stacking up.
+; each new call to gcd just has the new values for a and b e.g.
+
+(gcd 206 40)
+; => (gcd 40 (remainder 206 40))
+(gcd 6 40)
+; => (gcd 6 (remainder 40 6))
+(gcd 6 4)
+; => (gcd 4 (remainder 6 4))
+(gcd 4 2)
+; => (gcd 2 (remainder 4 2))
+(gcd 2 0)
+; => 2
+
+; so it's just the 4 remainder operations here.
