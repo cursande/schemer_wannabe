@@ -282,3 +282,84 @@
 ; => 2
 
 ; so it's just the 4 remainder operations here.
+
+;; *1.21*
+
+(define (square x) (* x x))
+
+(define (smallest-divisor n)
+  (find-divisor n 2)) ; starting with 2, find the smallest divisor of a given number
+
+(define (find-divisor n test-divisor)
+  (cond ((> (square test-divisor) n) n)
+        ((divides? test-divisor n) test-divisor)
+        (else (find-divisor n (+ test-divisor 1)))))
+
+(define (divides? a b) (= (remainder b a) 0))
+
+(smallest-divisor 199) ; => 199
+(smallest-divisor 1999) ; => 1999
+(smallest-divisor 19999) ; => 7
+
+; *1.22*
+; returns 3 smallest primes within a range from "min" to "max", and the time
+; it takes to run timed-prime-test with them
+
+(define (three-smallest-primes min max)
+  (search-for-primes min max 3))
+
+(define (search-for-primes min max counter)
+  (cond ((= counter 0) true)
+        ((= counter max) false)
+        ((prime? min)
+         (timed-prime-test min)
+         (search-for-primes (+ min 1) max (- counter 1)))
+        (else (search-for-primes (+ min 1) max counter))))
+
+;------ results ------
+
+; 1000 ~ 10,000
+
+; 1009 *** .01
+; 1013 *** 0.
+; 1019 *** 0.
+
+; 10,000 - 100,000
+
+; 10007 *** 0.
+; 10009 *** 0.
+; 10037 *** 0.
+
+; 100,000 - 100,000,000
+
+; 100003 *** 0.
+; 100019 *** 0.
+; 100043 *** 0.
+
+
+; 1,000,000 - 10,000,000
+
+; 1000003 *** 0.
+; 1000033 *** 0.
+; 1000037 *** 0.
+
+; Hm. Doesn't support sqrt(n) prediction at all! Maybe this computer is too fast.
+; After looking online, the answer seems to be testing with even bigger numbers, so...
+
+; 1,000,000,000 - 10,000,000,000
+
+; 1000000007 *** .04999999999999999
+; 1000000009 *** 4.0000000000000036e-2
+; 1000000021 *** .03999999999999998
+
+; 10,000,000,000 - 100,000,000,000
+
+; 10000000019 *** .12
+; 10000000033 *** .12
+; 10000000061 *** .1200000000000001
+
+; sqrt(1000000000) => 31622.78
+; sqrt(10000000000) => 100000
+; 0.05 * sqrt(10) => 0.16
+
+; Not quite getting the same as sqrt(n) prediction, but reasonably close between each range

@@ -1,45 +1,131 @@
 
-(define (gcd a b)
-  (if (= b 0)
-      a
-      (gcd b (remainder a b))))
+(define (square x) (* x x))
 
-;; Exercise 1.20. The process that a procedure generates is of course dependent on the rules used by the
-;; interpreter. As an example, consider the iterative gcd procedure given above. Suppose we were to
-;; interpret this procedure using normal-order evaluation, as discussed in section 1.1.5. (The normal-order-evaluation rule for if is described in
-;; exercise 1.5.) Using the substitution method (for normal order), illustrate the process generated in evaluating (gcd 206 40) and indicate the remainder operations that are actually performed. How many remainder operations are actually
-;; performed in the normal-order evaluation of (gcd 206 40)? In the applicative-order evaluation?
+(define (smallest-divisor n)
+  (find-divisor n 2)) ; starting with 2, find the smallest divisor of a given number
 
-; in normal order eval the substitution model is used, the program has to 'store up' each recursive call until it finally needs to evaluate it e.g. when b = 0
-; e.g.
+(define (find-divisor n test-divisor)
+  (cond ((> (square test-divisor) n) n)
+        ((divides? test-divisor n) test-divisor)
+        (else (find-divisor n (+ test-divisor 1)))))
 
-(gcd 40 (remainder 206 40))
-; a = 40
-; b = (remainder 206 40)
+(define (divides? a b) (= (remainder b a) 0))
 
-; so on the next call to gcd...
-(gcd (remainder 206 40)
-     (remainder 40 (remainder 206 40)))
-; a = (remainder 206 40)
-; b = (remainder 40 (remainder 206 40))
+; A number can only be prime if its smallest divisor is itself
 
-; We also call remainder when checking that b = 0..
+(define (prime? n) (= n (smallest-divisor n)))
 
-; it would take many calls to remainder to eventually return a in normal-order eval.
-; For now I cannot be bothered working out exactly how many.
+; this approach finds the solution in O(sqrt(n)) time
 
-; The difference between this and applicative-order eval is that (remainder a b) will be evaluated each time it's called, so it doesn't keep stacking up.
-; each new call to gcd just has the new values for a and b e.g.
+; the below calculates the exponential of n % n...
+; * note, an exponential is a function where the variable quantity is the exponent, not the base
 
-(gcd 206 40)
-; => (gcd 40 (remainder 206 40))
-(gcd 6 40)
-; => (gcd 6 (remainder 40 6))
-(gcd 6 4)
-; => (gcd 4 (remainder 6 4))
-(gcd 4 2)
-; => (gcd 2 (remainder 4 2))
-(gcd 2 0)
-; => 2
+(define (ex-mod base ex m)
+  (cond ((= ex 0) 1)
+	((even? ex)
+	 (remainder (square (ex-mod base (/ ex 2) m))
+		    m))
+	(else
+	  (remainder (* base (ex-mod base (- ex 1) m))
+		     m))))
 
-; so it's just the 4 remainder operations here.
+; as with fast-expt, this uses successive squaring
+
+; The Fermat test is performed by choosing at random a number a between 1 and n - 1 inclusive and
+; checking whether the remainder modulo n of the nth power of a is equal to a.
+
+(define (fermat-test n)
+  (define (test-n a)
+    (= (ex-mod a n n) a))
+  (test-n (+ (random (- n 1)) 1)))
+
+; combine them all together to make a method for finding prime numbers in O(log n) time...
+
+(define (fast-prime? n times)
+  (cond ((= times 0) true)
+	((fermat-test n) (fast-prime? n (- times 1)))
+	(else false)))
+
+; this method is *probabilistic*, you determine the confidence of the result / how many times the fermat-test is run.
+; then if any test fails, it just returns false
+;======================================================
+
+; *1.22*
+
+(define (timed-prime-test n)
+(newline)
+(display n)
+(start-prime-test n (runtime)))
+
+(define (start-prime-test n start-time)
+  (if (prime? n)
+      (report-prime (- (runtime) start-time))
+      false))
+
+(define (report-prime elapsed-time)
+  (display " *** ")
+  (display elapsed-time)
+  elapsed-time)
+
+;-------
+; returns 3 smallest primes within a range from "min" to "max", and the time
+; it takes to run timed-prime-test with them
+
+(define (three-smallest-primes min max)
+  (search-for-primes min max 3))
+
+(define (search-for-primes min max counter)
+  (cond ((= counter 0) true)
+        ((= counter max) false)
+        ((prime? min)
+         (timed-prime-test min)
+         (search-for-primes (+ min 1) max (- counter 1)))
+        (else (search-for-primes (+ min 1) max counter))))
+
+;------ results ------
+
+; 1000 ~ 10,000
+
+; 1009 *** .01
+; 1013 *** 0.
+; 1019 *** 0.
+
+; 10,000 - 100,000
+
+; 10007 *** 0.
+; 10009 *** 0.
+; 10037 *** 0.
+
+; 100,000 - 100,000,000
+
+; 100003 *** 0.
+; 100019 *** 0.
+; 100043 *** 0.
+
+
+; 1,000,000 - 10,000,000
+
+; 1000003 *** 0.
+; 1000033 *** 0.
+; 1000037 *** 0.
+
+; Hm. Doesn't support sqrt(n) prediction at all! Maybe this computer is too fast.
+; After looking online, the answer seems to be testing with even bigger numbers, so...
+
+; 1,000,000,000 - 10,000,000,000
+
+; 1000000007 *** .04999999999999999
+; 1000000009 *** 4.0000000000000036e-2
+; 1000000021 *** .03999999999999998
+
+; 10,000,000,000 - 100,000,000,000
+
+; 10000000019 *** .12
+; 10000000033 *** .12
+; 10000000061 *** .1200000000000001
+
+; sqrt(1000000000) => 31622.78
+; sqrt(10000000000) => 100000
+; 0.05 * sqrt(10) => 0.16
+
+; Not quite getting the same as sqrt(n) prediction, but reasonably close between each range
