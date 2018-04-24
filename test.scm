@@ -28,6 +28,13 @@
 	(else
 	  (remainder (* base (ex-mod base (- ex 1) m))
 		     m))))
+  (define (expmod base exp m)
+    (remainder (fast-expt base exp) m))
+
+  (define (fast-expt b n)
+    (cond ((= n 0) 1)
+          ((even? n) (square (fast-expt b (/ n 2))))
+          (else (* b (fast-expt b (- n 1))))))
 
 ; as with fast-expt, this uses successive squaring
 
@@ -118,3 +125,26 @@
 ; 10000000061 *** 0.
 
 ; Appears to be in line with log(n) prediction
+
+;; *1.25*
+
+;; (define (ex-mod base ex m)
+;;   (cond ((= ex 0) 1)
+;;         ((even? ex)
+;;          (remainder (square (ex-mod base (/ ex 2) m))
+;;                     m))
+;;         (else
+;;          (remainder (* base (ex-mod base (- ex 1) m))
+;;                     m))))
+
+(define (ex-mod base exp m)
+  (remainder (fast-expt base exp) m))
+
+(define (fast-expt b n)
+  (cond ((= n 0) 1)
+        ((even? n) (square (fast-expt b (/ n 2))))
+        (else (* b (fast-expt b (- n 1))))))
+
+; On testing, it becomes much slower with big numbers. The main issue with using
+; fast-expt is that we end up multiplying huge numbers: as fast-expt runs you never take the remainder of the exponent,
+; you just keep squaring / multiplying until n = 0.
