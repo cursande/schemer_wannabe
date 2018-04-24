@@ -58,7 +58,7 @@
 (start-prime-test n (runtime)))
 
 (define (start-prime-test n start-time)
-  (if (prime? n)
+  (if (fast-prime? n 10)
       (report-prime (- (runtime) start-time))
       false))
 
@@ -77,40 +77,12 @@
 (define (search-for-primes min max counter)
   (cond ((= counter 0) true)
         ((= counter max) false)
-        ((prime? min)
+        ((fast-prime? min 10)
          (timed-prime-test min)
          (search-for-primes (+ min 1) max (- counter 1)))
         (else (search-for-primes (+ min 1) max counter))))
 
 ;------ results ------
-
-; 1000 ~ 10,000
-
-; 1009 *** .01
-; 1013 *** 0.
-; 1019 *** 0.
-
-; 10,000 - 100,000
-
-; 10007 *** 0.
-; 10009 *** 0.
-; 10037 *** 0.
-
-; 100,000 - 100,000,000
-
-; 100003 *** 0.
-; 100019 *** 0.
-; 100043 *** 0.
-
-
-; 1,000,000 - 10,000,000
-
-; 1000003 *** 0.
-; 1000033 *** 0.
-; 1000037 *** 0.
-
-; Hm. Doesn't support sqrt(n) prediction at all! Maybe this computer is too fast.
-; After looking online, the answer seems to be testing with even bigger numbers, so...
 
 ; 1,000,000,000 - 10,000,000,000
 
@@ -129,3 +101,20 @@
 ; 0.05 * sqrt(10) => 0.16
 
 ; Not quite getting the same as sqrt(n) prediction, but reasonably close between each range
+
+; *1.23*
+
+
+; 1,000,000,000 - 10,000,000,000
+
+; 1000000007 *** 0.
+; 1000000009 *** 9.999999999999998e-3
+; 1000000021 *** 0.
+
+; 10,000,000,000 - 100,000,000,000
+
+; 10000000019 *** 0.
+; 10000000033 *** 1.0000000000000002e-2
+; 10000000061 *** 0.
+
+; Appears to be in line with log(n) prediction

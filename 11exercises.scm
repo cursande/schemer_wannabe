@@ -363,3 +363,21 @@
 ; 0.05 * sqrt(10) => 0.16
 
 ; Not quite getting the same as sqrt(n) prediction, but reasonably close between each range
+
+; *1.23*
+
+; When using fast-prime? instead...
+
+; 1,000,000,000 - 10,000,000,000
+
+; 1000000007 *** 0.
+; 1000000009 *** 9.999999999999998e-3
+; 1000000021 *** 0.
+
+; 10,000,000,000 - 100,000,000,000
+
+; 10000000019 *** 0.
+; 10000000033 *** 1.0000000000000002e-2
+; 10000000061 *** 0.
+
+; Appears to be in line with log(n) prediction
