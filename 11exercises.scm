@@ -366,6 +366,41 @@
 
 ; *1.23*
 
+(define (square x) (* x x))
+
+(define (smallest-divisor n)
+  (find-divisor n 2))
+
+(define (find-divisor n test-divisor)
+  (cond ((> (square test-divisor) n) n)
+        ((divides? test-divisor n) test-divisor)
+        (else (find-divisor n (next test-divisor)))))
+
+(define (divides? a b) (= (remainder b a) 0))
+
+(define (next td)
+  (if (= td 2)
+      3
+      (+ td 2)))
+
+; testing above with prime?:
+
+; 1,000,000,000 - 10,000,000,000
+
+; 1000000007 *** .03
+; 1000000009 *** .01999999999999999
+; 1000000021 *** .03
+
+; 10,000,000,000 - 100,000,000,000
+
+; 10000000019 *** .07999999999999996
+; 10000000033 *** .07999999999999996
+; 10000000061 *** .07000000000000006
+
+; not quite half the speed, but pretty close.
+
+; *1.24*
+
 ; When using fast-prime? instead...
 
 ; 1,000,000,000 - 10,000,000,000

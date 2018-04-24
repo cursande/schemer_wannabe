@@ -58,7 +58,7 @@
 (start-prime-test n (runtime)))
 
 (define (start-prime-test n start-time)
-  (if (fast-prime? n 10)
+  (if (prime? n)
       (report-prime (- (runtime) start-time))
       false))
 
@@ -77,7 +77,7 @@
 (define (search-for-primes min max counter)
   (cond ((= counter 0) true)
         ((= counter max) false)
-        ((fast-prime? min 10)
+        ((prime? min)
          (timed-prime-test min)
          (search-for-primes (+ min 1) max (- counter 1)))
         (else (search-for-primes (+ min 1) max counter))))
