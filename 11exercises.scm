@@ -455,3 +455,24 @@
 ; this is slower because it needs to do the same thing twice: * gets called with 2 arguments,
 ; square gets called with just the one call to expmod.
 ; Both arguments need to be evaluated first then here, which means twice as many calls to expmod.
+
+;; *1.27*
+
+
+; tests whether a^n is congruent to a mod n for every a < n
+(define (fermat-prime? n)
+  (fermat-prime-iter n 1))
+
+(define (fermat-prime-iter n a)
+  (cond ((= a n) true) ; if a reaches n without returning false, n is prime
+        ((not (= (ex-mod a n n) a)) false) ; if a^n is not congruent to a mod n, n is composite
+  (else (fermat-prime-iter n (+ a 1))))) ; test all a < n
+
+; smaller Carmichael numbers: 561, 1105, 1729, 2465, 2821, and 6601
+
+(fermat-prime? 561) ; => #t
+(fermat-prime? 1105) ; => #t
+(fermat-prime? 1729) ; => #t
+(fermat-prime? 2465) ; => #t
+(fermat-prime? 2821) ; => #t
+(fermat-prime? 6601) ; => #t
