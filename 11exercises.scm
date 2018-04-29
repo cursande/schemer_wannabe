@@ -476,3 +476,31 @@
 (fermat-prime? 2465) ; => #t
 (fermat-prime? 2821) ; => #t
 (fermat-prime? 6601) ; => #t
+
+;; *1.28*
+
+(define (square x) (* x x))
+
+(define (ex-mod-mr base ex m)
+  (cond ((= ex 0) 1)
+        ((even? ex)
+         (remainder (square (non-trivial-root? (ex-mod-mr base (/ ex 2) m) m)) ; returning 0 will signal that a nontrivial square root exists
+                    m))
+        (else
+         (remainder (* base (ex-mod-mr base (- ex 1) m))
+                    m))))
+
+(define (miller-rabin-prime? n)
+  (miller-rabin-prime-iter n 1))
+
+(define (miller-rabin-prime-iter n a)
+  (cond ((= a n) true)
+        ((not (= (ex-mod-mr a n n) a)) false)
+        (else (miller-rabin-prime-iter n (+ a 1)))))
+
+(define (non-trivial-root? x n)
+  (cond ((and (not (= x 1)) ; x is not equal to 1
+              (not (= x (- n 1))) ; ...and not equal to -1
+              (= (remainder (square x) n) 1)) ; ...and its square is equal to 1 modulo n
+         0) ; non-trivial of square root of 1 exists -> n is not prime
+        (else x))) ; otherwise return original value untouched
