@@ -504,3 +504,15 @@
               (= (remainder (square x) n) 1)) ; ...and its square is equal to 1 modulo n
          0) ; non-trivial of square root of 1 exists -> n is not prime
         (else x))) ; otherwise return original value untouched
+
+;; *1.29*
+
+(define (simpson f a b n)
+  (define h (/ (- b a) n))
+  (define (y k) (f (+ a (* k h))))
+  (define (next n) (+ n 2))
+  (* (/ h 3.0) 
+     (+ (* 2 (sum y 2 next (- n 2))) ; sum of all even values between a and b
+        (* 4 (sum y 1 next (- n 1))) ; sum of all odd values between a and b
+        (y 0) ; first
+        (y n)))) ; and last...all multiplied by h/3
