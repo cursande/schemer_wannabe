@@ -516,3 +516,13 @@
         (* 4 (sum y 1 next (- n 1))) ; sum of all odd values between a and b
         (y 0) ; first
         (y n)))) ; and last...all multiplied by h/3
+
+(integral cube 0 1 0.01) ; = .24998750000000042
+(integral cube 0 1 0.001) ; = .249999875000001
+
+(simpson cube 0 1 100) ; = 0.25
+(simpson cube 0 1 1000) ; =  0.25
+(simpson cube 0 1 10) ; =  0.25
+(simpson cube 0 1 5) ; =  .13493333333333332
+
+; does not take a very large n (at least with cube) to get an at least equally accurate approximation than the other integral method
