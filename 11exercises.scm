@@ -526,3 +526,14 @@
 (simpson cube 0 1 5) ; =  .13493333333333332
 
 ; does not take a very large n (at least with cube) to get an at least equally accurate approximation than the other integral method
+
+;; *1.30*
+
+; iterative version
+
+(define (sum term a next b)
+  (define (iter a result)
+    (if (> a b)
+      result 
+      (iter (next a) (+ (term a) result))))
+  (iter a 0))
