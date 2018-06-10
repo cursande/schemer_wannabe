@@ -1,4 +1,3 @@
-
 ;; *Exercise 1.1*
 
 10 ; -> 10
@@ -27,7 +26,7 @@
 ;; *1.2*
 
 (/ (+ 5 4 (- 2 (- 3 (+ 6 0.8))))
-   (* 3 (- 6 2) (- 2 7))) 
+   (* 3 (- 6 2) (- 2 7)))
 
 ;; *1.3*
 
@@ -36,7 +35,7 @@
 (define (sum-of-squares x y z) ; work out which is the smallest number, and add the squares of the other two
   (cond ((and (< x y) (< x z)) (+ (square y) (square z)))
         ((and (< y x) (< y z)) (+ (square x) (square z)))
-        ((and (< z x) (< z y)) (+ (square x) (square y)))))	
+        ((and (< z x) (< z y)) (+ (square x) (square y)))))
 
 ;; *1.4*
 
@@ -97,10 +96,10 @@
 
 (define (A x y)
   (cond ((= y 0) 0)
-	((= x 0) (* 2 y))
-	((= y 1) 2)
-	(else (A (- x 1)
-		 (A x (- y 1))))))
+  ((= x 0) (* 2 y))
+  ((= y 1) 2)
+  (else (A (- x 1)
+     (A x (- y 1))))))
 
 (A 1 10) ; -> 1024
 (A 2 4)  ; -> 65536
@@ -112,43 +111,43 @@
 
 ;; *1.11*
 
-;	     { n     if n < 3 }
-; f(n) = 
+;      { n     if n < 3 }
+; f(n) =
 ;        { f(n - 1) + 2f(n - 2) + 3f(n - 3)     if n >= 3) }
 
 ; recursive
 
 (define (f n)
   (cond ((< n 3) n)
-	(else (+ (f (- n 1))
-		 (* 2 (f (- n 2)))
-		 (* 3 (f (- n 3)))))))
+  (else (+ (f (- n 1))
+     (* 2 (f (- n 2)))
+     (* 3 (f (- n 3)))))))
 
 ; iterative
 (define (f n)
   (f-iter n 0 1 2)) ; initialise state with these variables
 
-(define (f-iter i x y z) 
+(define (f-iter i x y z)
      (cond ((= i 0) x) ; use i as counter to track loops
-	   (else (f-iter (- i 1) ; just one recursive call, passing in the updated values each time
-			 y 
-			 z 
-			 (+ z (* 2 y) (* 3 x)))))) 
+     (else (f-iter (- i 1) ; just one recursive call, passing in the updated values each time
+       y
+       z
+       (+ z (* 2 y) (* 3 x))))))
 
 ;; *1.12*
 
 ; recursive
 
 (define (pascal r c) ; r = rows, c = col
-  (cond ((= c 1) 1) 
-	((= c r) 1) ; first col always 1, final column (equal to current row) always 1 as well
-	(else (+ (pascal (- r 1) (- c 1))
-		 (pascal (- r 1) c))))) ; like fib, work back recursively to the beginning, and then sub the right values in
+  (cond ((= c 1) 1)
+  ((= c r) 1) ; first col always 1, final column (equal to current row) always 1 as well
+  (else (+ (pascal (- r 1) (- c 1))
+     (pascal (- r 1) c))))) ; like fib, work back recursively to the beginning, and then sub the right values in
 
 ;; *1.15*
 ; *(a)
  (define angle)
-  (if (not (> (abs angle) 0.1)) ; check angle is larger than 0.1 
+  (if (not (> (abs angle) 0.1)) ; check angle is larger than 0.1
            angle
            (p (sine (/ angle 3.0)))) ; p isn't done until angle is already smaller than 0.1!
 
@@ -184,8 +183,8 @@
 
 (define (* a b)
   (cond ((= a 0) 0) ; a is our counter/iterator, b is result
-	((even? a) (* (halve a) (double b))) ; e.g. 6 * 6 = 3 * 12
-	(else (+ b (* (- a 1) b))))) ; e.g. 3 * 12 = 12 + 2 * 12, makes a even again. Eventually you're left with 36 + 0 * 36 = 36
+  ((even? a) (* (halve a) (double b))) ; e.g. 6 * 6 = 3 * 12
+  (else (+ b (* (- a 1) b))))) ; e.g. 3 * 12 = 12 + 2 * 12, makes a even again. Eventually you're left with 36 + 0 * 36 = 36
 
 ;; *1.18*
 
@@ -194,8 +193,8 @@
 
 (define (*-iter a b n) ; a is counter, b tracks multiplier, n tracks total sum/result
   (cond ((= a 0) n)
-	((even? a) (*-iter (halve a) (double b) n))
-	(else (*-iter (- a 1) b (+ b n)))))
+  ((even? a) (*-iter (halve a) (double b) n))
+  (else (*-iter (- a 1) b (+ b n)))))
 
 ;; *1.19*
 
@@ -204,10 +203,10 @@
 
 ; Tpq
 
-; a <- bq + aq + ap 
+; a <- bq + aq + ap
 ; b <- bp + aq
 
-; successive squaring: find the 'square' of Tpq by subbing in first iteration into the next one 
+; successive squaring: find the 'square' of Tpq by subbing in first iteration into the next one
 
 ; a <- (bp + aq)q + (bq + aq + ap)q + (bq + aq + ap)p
 ; b <- (bp + aq)p + (bq + aq + ap)q
@@ -234,17 +233,17 @@
 
 (define (fib-iter a b p q count)
   (cond ((= count 0) b)
-	((even? count)
-	 (fib-iter a
-		   b
-		   (+ (square p) (square q)) ; p squared, transformation like in fast-expt
-		   (+ (* 2 p q) (square q)) ; q squared
-		   (/ count 2)))
-	(else (fib-iter (+ (* b q) (* a q) (* a p))
-			(+ (* b p) (* a q))
-			p
-			q
-			(- count 1)))))
+  ((even? count)
+   (fib-iter a
+       b
+       (+ (square p) (square q)) ; p squared, transformation like in fast-expt
+       (+ (* 2 p q) (square q)) ; q squared
+       (/ count 2)))
+  (else (fib-iter (+ (* b q) (* a q) (* a p))
+      (+ (* b p) (* a q))
+      p
+      q
+      (- count 1)))))
 
 
 ;; *1.20*
@@ -511,7 +510,7 @@
   (define h (/ (- b a) n))
   (define (y k) (f (+ a (* k h))))
   (define (next n) (+ n 2))
-  (* (/ h 3.0) 
+  (* (/ h 3.0)
      (+ (* 2 (sum y 2 next (- n 2))) ; sum of all even values between a and b
         (* 4 (sum y 1 next (- n 1))) ; sum of all odd values between a and b
         (y 0) ; first
@@ -534,7 +533,7 @@
 (define (sum term a next b)
   (define (iter a result)
     (if (> a b)
-      result 
+      result
       (iter (next a) (+ (term a) result))))
   (iter a 0))
 
@@ -552,7 +551,7 @@
 (define (identity x) x)
 
 (define (factorial n)
-  (product identity 1 icrement n)) 
+  (product identity 1 icrement n))
 
 (factorial 3)
 (factorial 4)
@@ -573,10 +572,34 @@
 
 ; hmmm....
 
-; b. 
+; b.
 
 (define (product term a next b)
   (if (> a b)
     0
     (* (term a)
        (product term (next a) next b))))
+
+;; *1.32*
+
+; a.
+(define (accumulate combiner null-value term a next b)
+  (define (iter a result)
+    (if (> a b)
+        result
+        (iter (next a) (combiner (term a) result))))
+  (iter a null-value))
+
+(define (sum term a next b)
+  (accumulate + 0 term a next b))
+
+(define (product term a next b)
+  (accumulate * 1 term a next b))
+
+; b.
+
+(define (accumulate combiner null-value term a next b)
+  (if (> a b)
+      null-value
+      (combiner (term a)
+                (accumulate combiner null-value term (next a) next b))))
