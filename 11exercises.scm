@@ -603,3 +603,58 @@
       null-value
       (combiner (term a)
                 (accumulate combiner null-value term (next a) next b))))
+
+;; *1.33*
+
+; a.
+; prime stuff
+(define (square x) (* x x))
+
+(define (ex-mod-mr base ex m)
+  (cond ((= ex 0) 1)
+        ((even? ex)
+         (remainder (square (non-trivial-root? (ex-mod-mr base (/ ex 2) m) m))
+                    m))
+        (else
+         (remainder (* base (ex-mod-mr base (- ex 1) m))
+                    m))))
+
+(define (miller-rabin-prime? n)
+  (miller-rabin-prime-iter n 1))
+
+(define (miller-rabin-prime-iter n a)
+  (cond ((= a n) true)
+        ((not (= (ex-mod-mr a n n) a)) false)
+        (else (miller-rabin-prime-iter n (+ a 1)))))
+
+(define (non-trivial-root? x n)
+  (cond ((and (not (= x 1))
+              (not (= x (- n 1)))
+              (= (remainder (square x) n) 1))
+         0)
+        (else x)))
+; prime filter
+
+(define (increment x) (+ x 1))
+
+(define (sum-of-squared-primes a b)
+  (filtered-accumulate + 0 miller-rabin-prime? square a increment b))
+
+(sum-of-squared-primes 1 10) ; = 88
+(sum-of-squared-primes 10 15) ; = 290
+
+;; b.
+
+(define (gcd a b)
+  (if (= b 0)
+      a
+      (gcd b (remainder a b))))
+
+(define (identity x) x)
+
+(define (product-of-relative-primes b)
+  (define (relative-prime? a)
+    (= (gcd a b) 1))
+  (filtered-accumulate * 1 relative-prime? identity 1 increment (- b 1)))
+
+(product-of-relative-primes 10) ; = 189

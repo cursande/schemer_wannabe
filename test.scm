@@ -58,5 +58,16 @@
 ;; b. the product of all the positive integers less than n that are relatively prime to n
 ;; (i.e., all positive integers i < n such that GCD(i,n) = 1).
 
+(define (gcd a b)
+  (if (= b 0)
+      a
+      (gcd b (remainder a b))))
 
+(define (identity x) x)
 
+(define (product-of-relative-primes b)
+  (define (relative-prime? a)
+    (= (gcd a b) 1))
+  (filtered-accumulate * 1 relative-prime? identity 1 increment (- b 1)))
+
+(product-of-relative-primes 10) ; = 189
