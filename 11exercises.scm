@@ -633,6 +633,7 @@
               (= (remainder (square x) n) 1))
          0)
         (else x)))
+
 ; prime filter
 
 (define (increment x) (+ x 1))
@@ -643,7 +644,7 @@
 (sum-of-squared-primes 1 10) ; = 88
 (sum-of-squared-primes 10 15) ; = 290
 
-;; b.
+; b.
 
 (define (gcd a b)
   (if (= b 0)
@@ -658,3 +659,10 @@
   (filtered-accumulate * 1 relative-prime? identity 1 increment (- b 1)))
 
 (product-of-relative-primes 10) ; = 189
+
+;; *1.34*
+
+
+(f f) ; = The object 2 is not applicable.
+
+; It's trying to call 2 with an argument of 2, obviously 2 is not a procedure so nothing can happen.
