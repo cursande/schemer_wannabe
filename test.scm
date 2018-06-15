@@ -59,3 +59,16 @@
 ;; b. If your cont-frac procedure generates a recursive process, write one that
 ;; generates an iterative process. If it generates an iterative process, write one
 ;; that generates a recursive process.
+
+(define (cont-frac n d k)
+  (define (next i)
+    (if (= k i)
+        (/ (n i) (d i))
+        (/ (n i) (+ (d i) (next (+ i 1))))))
+  (next 1))
+
+(cont-frac (lambda (i) 1.0)
+           (lambda (i) 1.0)
+           15)
+
+; = .6180344478216819

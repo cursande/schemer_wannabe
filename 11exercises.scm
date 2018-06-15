@@ -821,3 +821,18 @@
 
 ; 15 - 4 = 11
 ; k needs to be atleast 11 to be accurate to 4 decimal places
+
+; b.
+
+(define (cont-frac n d k)
+  (define (next i)
+    (if (= k i)
+        (/ (n i) (d i))
+        (/ (n i) (+ (d i) (next (+ i 1))))))
+  (next 1))
+
+(cont-frac (lambda (i) 1.0)
+           (lambda (i) 1.0)
+           15)
+
+; = .6180344478216819
