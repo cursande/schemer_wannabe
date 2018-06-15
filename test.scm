@@ -1,97 +1,61 @@
-;; Exercise 1.36. Modify fixed-point so that it prints the sequence of approximations it generates,
-;; using the newline and display primitives shown in exercise 1.22.
-;; Then find a solution to
+;; Exercise 1.37.
 
-;; x^x = 1000 by finding a fixed point of x -> log(1000)/log(x)
+;; a. An infinite continued fraction is an expression of the form...
+;; As an example, one can show that the infinite continued fraction expansion with the
+;; Ni and the Di all equal to 1 produces 1/ϕ, where ϕ is the golden ratio (described in section 1.2.2).
+;; One way to approximate an infinite continued fraction is to truncate the expansion after a given number of terms.
 
-;; (Use Scheme’s primitive log procedure, which computes natural logarithms.)
-;; Compare the number of steps this takes with and without average damping.
-;; (Note that you cannot start fixed-point with a guess of 1, as this would cause division by log(1) = 0)
+;; Such a truncation -- a so-called k-term finite continued fraction -- has the form...
 
+;; Suppose that n and d are procedures of one argument (the term index i) that return the
+;; Ni and Di of the terms of the continued fraction.
 
-(define (search f neg-point pos-point)
-  (let ((midpoint (average neg-point pos-point)))
-    (if (close-enough? neg-point pos-point)
-        midpoint
-        (let ((test-value (f midpoint)))
-          (cond ((positive? test-value)
-                 (search f neg-point midpoint))
-                ((negative? test-value)
-                 (search f midpoint pos-point))
-                (else midpoint))))))
+;; Define a procedure cont-frac such that evaluating(cont-frac n d k) computes the value of the k-term finite continued fraction. Check your procedure by approximating 1/ϕ using
 
-(define tolerance 0.00001)
+;; (cont-frac (lambda (i) 1.0)
+;;            (lambda (i) 1.0)
+;;            k)
 
-(define (close-enough? x y)
-  (< (abs (- x y)) 0.001))
+;; for successive values of k. How large must you make k in order to get an approximation that is
+;; accurate to 4 decimal places?
 
-(define (fixed-point f first-guess)
-  (define (close-enough? v1 v2)
-    (< (abs (- v1 v2)) tolerance))
-  (define (try guess)
+(define (cont-frac n d k)
+  (define (iter i result)
     (newline)
-    (display guess)
-    (let ((next (f guess)))
-      (if (close-enough? guess next)
-          next
-          (try next))))
-  (try first-guess))
+    (display result)
+    (display " - ")
+    (display i)
+    (if (= i 0)
+        result
+        (iter (- i 1) (/ (n i) (+ (d i) result))))) ; for each iteration of k, (Nk/Dk)
+  (iter k 0))
 
-; without average damping
-(fixed-point (lambda (x) (/ (log 1000) (log x)))
-             2.0)
 
-;; 2.
-;; 9.965784284662087
-;; 3.004472209841214
-;; 6.279195757507157
-;; 3.759850702401539
-;; 5.215843784925895
-;; 4.182207192401397
-;; 4.8277650983445906
-;; 4.387593384662677
-;; 4.671250085763899
-;; 4.481403616895052
-;; 4.6053657460929
-;; 4.5230849678718865
-;; 4.577114682047341
-;; 4.541382480151454
-;; 4.564903245230833
-;; 4.549372679303342
-;; 4.559606491913287
-;; 4.552853875788271
-;; 4.557305529748263
-;; 4.554369064436181
-;; 4.556305311532999
-;; 4.555028263573554
-;; 4.555870396702851
-;; 4.555315001192079
-;; 4.5556812635433275
-;; 4.555439715736846
-;; 4.555599009998291
-;; 4.555493957531389
-;; 4.555563237292884
-;; 4.555517548417651
-;; 4.555547679306398
-;; 4.555527808516254
-;; 4.555540912917957
-;; Value: 4.555532270803653
+(cont-frac (lambda (i) 1.0)
+           (lambda (i) 1.0)
+           15)
 
-; steps = 35
+;; 0 - 15
+;; 1. - 14
+;; .5 - 13
+;; .6666666666666666 - 12
+;; .6000000000000001 - 11
+;; .625 - 10
+;; .6153846153846154 - 9
+;; .6190476190476191 - 8
+;; .6176470588235294 - 7
+;; .6181818181818182 - 6
+;; .6179775280898876 - 5
+;; .6180555555555556 - 4
+;; .6180257510729613 - 3
+;; .6180371352785146 - 2
+;; .6180327868852459 - 1
+;; .6180344478216819 - 0
+;Value: .6180344478216819
 
-; with average damping
-(fixed-point (lambda (x) (/ (+ x (/ (log 1000) (log x))) 2))
-             2.0)
+; 15 - 4 = 11
+; k needs to be atleast 11 to be accurate to 4 decimal places
 
-;; 2.
-;; 5.9828921423310435
-;; 4.922168721308343
-;; 4.628224318195455
-;; 4.568346513136242
-;; 4.5577305909237005
-;; 4.555909809045131
-;; 4.555599411610624
-;; 4.5555465521473675
-;Value: 4.555537551999825
-
-; steps = 10
+;; b. If your cont-frac procedure generates a recursive process, write one that
+;; generates an iterative process. If it generates an iterative process, write one
+;; that generates a recursive process.
