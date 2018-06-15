@@ -1,17 +1,41 @@
-;; Exercise 1.34. Suppose we define the procedure
+;; Exercise 1.35. Show that the golden ratio (section 1.2.2) is a fixed point of the transformation:
+;; x -> 1 + (1/x)
+;; and use this fact to compute by means of the fixed-point procedure.
 
-;; (define (f g)
-;;   (g 2))
 
-;; Then we have
+; ϕ = (1 + √5) / 2
+; ϕ^2 = ϕ + 1
 
-;; (f square)
-;; 4
-;; (f (lambda (z) (* z (+ z 1))))
-;; 6
+; => ϕ = 1 + (1 / ϕ)
 
-;; What happens if we (perversely) ask the interpreter to evaluate the combination (f f)? Explain.
+(define (search f neg-point pos-point)
+  (let ((midpoint (average neg-point pos-point)))
+    (if (close-enough? neg-point pos-point)
+        midpoint
+        (let ((test-value (f midpoint)))
+          (cond ((positive? test-value)
+                 (search f neg-point midpoint))
+                ((negative? test-value)
+                 (search f midpoint pos-point))
+                (else midpoint))))))
 
-(f f) ; = The object 2 is not applicable.
+(define tolerance 0.00001)
 
-; It's trying to call 2 with an argument of 2, obviously 2 is not a procedure so nothing can happen.
+(define (close-enough? x y)
+  (< (abs (- x y)) 0.001))
+
+(define (fixed-point f first-guess)
+  (define (close-enough? v1 v2)
+    (< (abs (- v1 v2)) tolerance))
+  (define (try guess)
+    (let ((next (f guess)))
+      (if (close-enough? guess next)
+          next
+          (try next))))
+  (try first-guess))
+
+; find fixed-point of golden raio
+(fixed-point (lambda (x) (+ 1 (/ 1 x)))
+             1.0)
+
+; = 1.6180327868852458
