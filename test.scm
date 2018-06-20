@@ -1,8 +1,8 @@
-;; Exercise 1.38. In 1737, the Swiss mathematician Leonhard Euler published a memoir
-;; De Fractionibus Continuis, which included a continued fraction expansion for e - 2,
-;; where e is the base of the natural logarithms. In this fraction, the N i are all 1,
-;; and the D i are successively 1, 2, 1, 1, 4, 1, 1, 6, 1, 1, 8, .... Write a program
-;; that uses your cont-frac procedure from exercise 1.37 to approximate e, based on Euler’s expansion.
+;; Exercise 1.39. A continued fraction representation of the tangent function was published
+;; in 1770 by the German mathematician J.H. Lambert:where x is in radians.
+
+;; Define a procedure (tan-cf x k) that computes an approximation to the tangent function based on
+;; Lambert’s formula. K specifies the number of terms to compute, as in exercise 1.37.
 
 (define (cont-frac n d k)
   (define (iter i result)
@@ -11,23 +11,17 @@
         (iter (- i 1) (/ (n i) (+ (d i) result)))))
   (iter k 0))
 
-(define (divides? a b)
-  (= (remainder b a) 0))
+(define (square x) (* x x))
 
-(define (next-d k)
-  (if (divides? 3 (+ k 1))
-      (* 2 (/ (+ k 1) 3))
-      1))
+(define (tan-cf x k)
+  (define (next-n k)
+    (if (= k 1)
+    x
+    (- (square x))))
+  (define (next-d k)
+    (- (* 2 k) 1))
+  (cont-frac next-n next-d k))
 
-; e = 2.71828
-
-(define (approx-e k)
-  (+ 2 (cont-frac (lambda (n) 1.0)
-                  next-d
-                  k)))
-
-(approx-e 1) ; = 3
-(approx-e 2) ; = 2.6666666666666665
-(approx-e 3) ; = 2.75
-(approx-e 4) ; = 2.7142857142857144
-(approx-e 10) ; = 2.7182817182817183
+(tan-cf 1.0 30) ; = 1.557407724654902
+(tan-cf 10.0 30) ; = .6483608274590866
+(tan-cf 20.0 30) ; = 2.237158493771187

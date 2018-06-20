@@ -866,3 +866,27 @@
 (approx-e 3) ; = 2.75
 (approx-e 4) ; = 2.7142857142857144
 (approx-e 10) ; = 2.7182817182817183
+
+;; *1.39*
+
+(define (cont-frac n d k)
+  (define (iter i result)
+    (if (= i 0)
+        result
+        (iter (- i 1) (/ (n i) (+ (d i) result)))))
+  (iter k 0))
+
+(define (square x) (* x x))
+
+(define (tan-cf x k)
+  (define (next-n k)
+    (if (= k 1)
+        x
+        (- (square x))))
+  (define (next-d k)
+    (- (* 2 k) 1))
+  (cont-frac next-n next-d k))
+
+(tan-cf 1.0 30) ; = 1.557407724654902
+(tan-cf 10.0 30) ; = .6483608274590866
+(tan-cf 20.0 30) ; = 2.237158493771187
