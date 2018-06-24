@@ -938,3 +938,12 @@
 
 (newtons-method (cubic 1 2 3) 1) ; = -1.2756822036498454
 (newtons-method (cubic 2 3 4) 1) ; = -1.6506291914330982
+
+;; *1.41*
+
+(define (double f)
+  (lambda (x) (f (f x))))
+
+(define (inc x) (+ x 1))
+
+(((double (double double)) inc) 5) ; = 21
