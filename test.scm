@@ -1,27 +1,51 @@
-;; Exercise 1.39. A continued fraction representation of the tangent function was published
-;; in 1770 by the German mathematician J.H. Lambert:where x is in radians.
+;; Exercise 1.40. Define a procedure cubic that can be used together with the newtons-method
+;; procedure in expressions of the form
 
-;; Define a procedure (tan-cf x k) that computes an approximation to the tangent function based on
-;; Lambert’s formula. K specifies the number of terms to compute, as in exercise 1.37.
+;; (newtons-method (cubic a b c) 1)
 
-(define (cont-frac n d k)
-  (define (iter i result)
-    (if (= i 0)
-        result
-        (iter (- i 1) (/ (n i) (+ (d i) result)))))
-  (iter k 0))
+;; to approximate zeros of the cubic x^3 + ax^2 + bx + c.
+
+; approx root of x^3 + x^2 + 2x + 3 = -1.2757
+; approx root of x^3 + 2x^2 + 3x + 4 = -1.6506
+
+(define tolerance 0.00001)
+
+(define (close-enough? x y)
+  (< (abs (- x y)) 0.001))
+
+(define (fixed-point f first-guess)
+  (define (close-enough? v1 v2)
+    (< (abs (- v1 v2)) tolerance))
+  (define (try guess)
+    (let ((next (f guess)))
+      (if (close-enough? guess next)
+          next
+          (try next))))
+  (try first-guess))
 
 (define (square x) (* x x))
 
-(define (tan-cf x k)
-  (define (next-n k)
-    (if (= k 1)
-    x
-    (- (square x))))
-  (define (next-d k)
-    (- (* 2 k) 1))
-  (cont-frac next-n next-d k))
+(define (cube x) (* x x x))
 
-(tan-cf 1.0 30) ; = 1.557407724654902
-(tan-cf 10.0 30) ; = .6483608274590866
-(tan-cf 20.0 30) ; = 2.237158493771187
+(define (deriv g)
+  (lambda (x)
+    (/ (- (g (+ x dx)) (g x))
+       dx)))
+
+(define dx 0.00001)
+
+(define (newton-transform g)
+  (lambda (x)
+    (- x (/ (g x) ((deriv g) x)))))
+
+(define (newtons-method g guess)
+  (fixed-point (newton-transform g) guess))
+
+(define (cubic a b c)
+  (lambda (x) (+ (cube x)
+                 (* (square x) a)
+                 (* b x)
+                 c)))
+
+(newtons-method (cubic 1 2 3) 1) ; = -1.2756822036498454
+(newtons-method (cubic 2 3 4) 1) ; = -1.6506291914330982
