@@ -959,3 +959,21 @@
 
 ((compose square inc) 6) ; = 49
 ((compose square inc) 10) ; = 121
+
+;; *1.43*
+
+(define (square x) (* x x))
+
+(define (inc x) (+ x 1))
+
+(define (compose f g)
+  (lambda (x) (f (g x))))
+
+(define (repeated f n)
+  (if (= n 1)
+      f
+      (compose f
+               (repeated f (- n 1)))))
+
+((repeated square 2) 5) ; = 625
+((repeated inc 4) 10) ; 14
