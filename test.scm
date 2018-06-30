@@ -1,19 +1,14 @@
-;; Exercise 1.43. If f is a numerical function and n is a positive integer, then we can form the nth
-;; repeated application of f, which is defined to be the function whose value at x is f(f(...(f(x))...)).
+;; Exercise 1.44. The idea of smoothing a function is an important concept in signal processing. If f is a
+;; function and dx is some small number, then the smoothed version of f is the function whose value at a
+;; point x is the average of f(x - dx), f(x), and f(x + dx).
 
-;; For example, if f is the function x x + 1, then the nth repeated application of f is the function x x +
-;; n. If f is the operation of squaring a number, then the nth repeated application of f is the function that
-;; raises its argument to the 2 n th power.
+;; Write a procedure smooth that takes as input a procedure that computes f and returns a procedure that
+;; computes the smoothed f. It is sometimes valuable to repeatedly smooth a function (that is,
+;; smooth the smoothed function, and so on) to obtain the n-fold smoothed function.
 
-;; Write a procedure that takes as inputs a procedure that computes f and a positive integer n and returns
-;; the procedure that computes the nth repeated application of f. Your procedure should be able to be used as follows:
-;; ((repeated square 2) 5) = 625
-
-;; Hint: You may find it convenient to use compose from exercise 1.42.
+;; Show how to generate the n-fold smoothed function of any given function using smooth and repeated from exercise 1.43.
 
 (define (square x) (* x x))
-
-(define (inc x) (+ x 1))
 
 (define (compose f g)
   (lambda (x) (f (g x))))
@@ -24,5 +19,15 @@
       (compose f
                (repeated f (- n 1)))))
 
-((repeated square 2) 5) ; = 625
-((repeated inc 4) 10) ; 14
+(define dx 0.00001)
+
+(define (smooth f)
+  (lambda (x) (/ (+ (f (- x dx))
+                    (f x)
+                    (f (+ x dx)))
+                 3)))
+
+(define (n-fold-smooth f n)
+  (repeated smooth n) f)
+
+; need to generate data from 'noisy' function to test against..
