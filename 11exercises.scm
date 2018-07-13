@@ -1107,3 +1107,58 @@
 (nth-root-damped 8 3) ; = 2.000002163438156
 (nth-root-damped 16 4) ; = 2.0000000000021965
 (nth-root-damped 32 5) ; = 2.000002548192768
+
+;; *1.46*
+
+(define (sqrt-iter guess x)
+  (if (good-enough? guess x)
+      guess
+      (sqrt-iter (improve guess x)
+                 x)))
+
+(define (improve guess x)
+  (average guess (/ x guess)))
+
+(define (average x y)
+  (/ (+ x y) 2))
+
+(define (good-enough? guess x)
+  (< (abs (- (square guess) x)) 0.001))
+
+(define (sqrt x)
+  (sqrt-iter 1.0 x))
+
+; ------------------------
+
+(define (iterative-improve good-enough? guess-improver)
+  (lambda (initial-guess)
+    (define (iter guess)
+      (if (good-enough? guess)
+          guess
+          (iter (guess-improver guess))))
+    (iter initial-guess)))
+
+; sqrt
+
+(define (sqrt x)
+  (define (good-enough? guess)
+    (< (abs (- (square guess) x)) 0.001))
+  (define (improve guess)
+    (average guess (/ x guess)))
+  ((iterative-improve good-enough? improve) 1.0))
+
+(sqrt 25) ; = 5.000023178253949
+
+; fixed-point
+
+(define tolerance 0.00001)
+
+(define (fixed-point f)
+  (iterative-improve good-enough? f) 2.0)
+
+(define (fixed-point f)
+  (define (good-enough? guess)
+    (< (abs (- guess (f guess))) tolerance))
+  ((iterative-improve good-enough? f) 2.0))
+
+(fixed-point (lambda (x) (+ 1 (/ 1 x)))) ; = 1.6180371352785146
