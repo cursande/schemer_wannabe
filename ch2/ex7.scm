@@ -5,10 +5,10 @@
 
 ;; Define selectors upper-bound and lower-bound to complete the implementation.
 
-(define (upper-bound interval) (car interval))
-(define (lower-bound interval) (cdr interval))
+(define (lower-bound interval) (car interval))
+(define (upper-bound interval) (cdr interval))
 
 (define test-interval (cons 6 8))
 
-(upper-bound test-interval) ; => 6
-(lower-bound test-interval) ; => 8
+(lower-bound test-interval) ; => 6
+(upper-bound test-interval) ; => 8
