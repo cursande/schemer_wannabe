@@ -17,20 +17,23 @@
                    (max p1 p2 p3 p4))))
 
 (define (spans-zero? x)
-  (zero? (- (abs (lower-bound x))
-            (abs (upper-bound x)))))
+  (and (<= (lower-bound x) 0)
+       (>= (upper-bound x) 0)))
 
 (define (div-interval x y)
+  (display (lower-bound y))
+  (newline)
+  (display (spans-zero? y))
   (if (or (spans-zero? x)
           (spans-zero? y))
-      "Cannot divide interval by 0"
+      "Cannot divide interval than spans 0"
       (mul-interval x
                     (make-interval (/ 1.0 (upper-bound y))
                                    (/ 1.0 (lower-bound y))))))
 
-(define interval-one (make-interval 4 5))
+(define interval-one (make-interval 7 12))
 (define interval-two (make-interval 5 8))
-(define interval-three (make-interval 0 0))
+(define interval-three (make-interval -2 2))
 
-(div-interval interval-one interval-two) ; => (.5 . 1.)
-(div-interval interval-one interval-three) ; => "Cannot divide interval by 0"
+(div-interval interval-one interval-two) ; => (.875 . 1.5)
+(div-interval interval-one interval-three) ; => "Cannot divide interval than spans 0"
