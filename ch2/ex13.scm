@@ -8,14 +8,12 @@
 (define (lower-bound interval) (car interval))
 (define (upper-bound interval) (cdr interval))
 
-; if all numbers are positive we can assume that the min will be p1 * p3, and the
-; max will be p2 * p4
 (define (mul-interval x y)
   (let ((p1 (* (lower-bound x) (lower-bound y)))
         (p2 (* (lower-bound x) (upper-bound y)))
         (p3 (* (upper-bound x) (lower-bound y)))
-        (p4 (* (upper-bound x) (lower-bound y))))
-    (make-interval (* p1 p3) (* p2 p4))))
+        (p4 (* (upper-bound x) (upper-bound y))))
+    (make-interval p1 p4)))
 
 (define (center i)
   (/ (+ (lower-bound i) (upper-bound i)) 2))
@@ -34,7 +32,7 @@
 (define interval-one (make-center-percent 5 0.4)) ; => (4.98 . 5.02)
 (define interval-two (make-center-percent 3 0.2)) ; => (2.994 . 3.006)
 
-(percent (mul-interval interval-one interval-two)) ; => .19999999999998894
+(percent (mul-interval interval-one interval-two)) ; => .599995200038381
 
 ; now the tolerance of the factors..
 
