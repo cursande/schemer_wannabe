@@ -51,9 +51,33 @@
 ;; by its top-right branch (that is, if the length of the left rod multiplied by the weight hanging from that
 ;; rod is equal to the corresponding product for the right side) and if each of the submobiles hanging off
 ;; its branches is balanced. Design a predicate that tests whether a binary mobile is balanced.
+
+
+(define (mobile-balanced? mobile)
+  (define (torque length weight) (* length weight))
+  (define (branch-torque branch)
+    (torque (branch-length branch)
+            (if (pair? (branch-structure branch))
+                (total-weight (branch-structure branch))
+                (branch-structure branch))))
+  (= (branch-torque (left-branch mobile))
+     (branch-torque (right-branch mobile))))
+
+(mobile-balanced? mobile-1) ; => #f
+
+(define branch-3 (make-branch 8 (make-mobile (make-branch 4 4)
+                                             (make-branch 7 7))))
+
+(define mobile-2 (make-mobile branch-3 branch-3))
+
+(mobile-balanced? mobile-2) ; => #t
+
 ;; d. Suppose we change the representation of mobiles so that the constructors are
 
 ;; (define (make-mobile-left-right left right) (cons left right))
 ;; (define (make-branch length structure) (cons length structure))
 
 ;; How much do you need to change your programs to convert to the new representation?
+
+(define (make-mobile-left-right left right) (cons left right))
+(define (make-branch length structure) (cons length structure))
