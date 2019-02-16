@@ -79,5 +79,21 @@
 
 ;; How much do you need to change your programs to convert to the new representation?
 
-(define (make-mobile-left-right left right) (cons left right))
+(define (make-mobile left right) (cons left right))
 (define (make-branch length structure) (cons length structure))
+
+(define branch-4 (make-branch 8 7))
+(define branch-5 (make-branch 8 9))
+(define mobile-3 (make-mobile branch-4 branch-5))
+
+(define (right-branch mobile) (car (cdr mobile)))
+(define (branch-structure branch) (car (cdr branch)))
+
+(right-branch mobile-3) ; => 8
+(branch-structure branch-4) ; => Error
+
+(define (right-branch mobile) (cdr mobile))
+(define (branch-structure branch) (cdr branch))
+
+(right-branch mobile-3) ; => (8 . 9)
+(branch-structure branch-4) ; => 7
