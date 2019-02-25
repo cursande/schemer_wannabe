@@ -16,3 +16,12 @@
         ((not (pair? tree)) (square tree))
         (else (cons (square-tree (car tree))
                     (square-tree (cdr tree))))))
+
+;; with map
+
+(define (square-tree tree)
+  (map (lambda (subtree)
+         (if (not (pair? subtree))
+             (square subtree)
+             (square-tree subtree)))
+       tree))
