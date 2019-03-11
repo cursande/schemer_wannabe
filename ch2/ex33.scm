@@ -25,3 +25,22 @@
 (define (cube x) (* x x x))
 
 (map cube '(1 2 3)) ; => (1 8 27)
+
+;; ----------------
+
+(define (append seq1 seq2)
+  (accumulate cons
+              seq1
+              seq2))
+
+(append '(1 2) '(3 4)) ; => (3 4 1 2)
+
+;; ----------------
+
+(define (length sequence)
+  (accumulate (lambda (x y)
+                (+ 1 y))
+              0
+              sequence))
+
+(length '(5 6 9 1 5 6)) ; => 6
