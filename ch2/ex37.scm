@@ -34,7 +34,15 @@
   (map (lambda (a) (dot-product a v))
        m))
 
-(define test-matrix (list (list 1 -1 2) (list 0 -3 1)))
+(define test-matrix (list (list 1 -1 2)
+                          (list 0 -3 1)))
 (define test-vector (list 2 1 0))
 
 (matrix-*-vector test-matrix test-vector) ; => (1 -3)
+
+(define (transpose mat)
+  (accumulate-n cons
+                '()
+                mat))
+
+(transpose test-matrix) ; => ((1 0) (-1 -3) (2 1))
