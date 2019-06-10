@@ -46,3 +46,16 @@
                 mat))
 
 (transpose test-matrix) ; => ((1 0) (-1 -3) (2 1))
+
+(define (matrix-*-matrix m n)
+  (let ((cols (transpose n)))
+    (map (lambda (r) (matrix-*-vector cols r))
+         m)))
+
+(define test-matrix1 (list (list 1 -1 2)
+                          (list 0 -3 1)))
+(define test-matrix2 (list (list 3 1)
+                           (list 2 0)
+                           (list 3 1)))
+
+(matrix-*-matrix test-matrix1 test-matrix2) ; => ((7 3) (-3 1))
