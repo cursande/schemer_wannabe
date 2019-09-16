@@ -68,3 +68,18 @@
    (list top-left-to-bottom-right
          bottom-left-to-top-right)))
 
+;; c)
+(define (segment-midpoint segment)
+  (let ((segment-x-points (list ((xcor-vect start-segment)
+                                   (xcor-vect end-segment))))
+        (segment-y-points (list ((ycor-vect start-segment)
+                                   (ycor-vect end-segment)))))
+    (make-vect (/ segment-x-points 2)
+               (/ segment-y-points 2))))
+
+(define (diamond-shape)
+  (segments->painter
+   (list (segment-midpoint top-segment)
+         (segment-midpoint right-segment)
+         (segment-midpoint left-segment)
+         (segment-midpoint bottom-segment))))
