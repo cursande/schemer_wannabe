@@ -46,13 +46,13 @@
         ((frame-coord-map frame) (end-segment segment))))
      segment-list)))
 
+;; a)
 (define top-segment (make-segment (make-vect 0 0.99) (make-vect 0.99 0.99)))
 (define right-segment (make-segment (make-vect 0.99 0) (make-vect 0.99 0.99)))
 (define left-segment (make-segment (make-vect 0 0) (make-vect 0 0.99)))
 (define bottom-segment (make-segment (make-vect 0 0) (make-vect 0.99 0)))
 
-;; a)
-(define (outline frame)
+(define (outline)
   (segments->painter
    (list top-segment
          right-segment
