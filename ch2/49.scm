@@ -58,3 +58,13 @@
          right-segment
          left-segment
          bottom-segment)))
+
+;; b)
+(define top-left-to-bottom-right (make-segment (make-vect 0 0.99) (make-vect 0.99 0)))
+(define bottom-left-to-top-right (make-segment (make-vect 0 0) (make-vect 0.99 0.99)))
+
+(define (connect-corners)
+  (segments->painter
+   (list top-left-to-bottom-right
+         bottom-left-to-top-right)))
+
