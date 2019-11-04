@@ -53,9 +53,6 @@
 (define (exponent p) (caddr p))
 
 (define (make-exponentiation base exponent)
-  (list '** base exponent))
-
-(define (make-exponentiation base exponent)
   (cond ((=number? exponent 0) 1)
         ((=number? exponent 1) base)
         ((and (number? base) (number? exponent))
