@@ -8,9 +8,12 @@
 (define (tree->list-1 tree)
   (if (null? tree)
       '()
-       (append (tree->list-1 (left-branch tree))
-               (cons (entry tree)
-                     (tree->list-1 (right-branch tree))))))
+      (let ((result (append (tree->list-1 (left-branch tree))
+                            (cons (entry tree)
+                                  (tree->list-1 (right-branch tree))))))
+        (newline)
+        (display result)
+        result)))
 
 (define (tree->list-2 tree)
   (define (copy-to-list tree result-list)
@@ -71,3 +74,14 @@
 ;; b. Do the two procedures have the same order of growth in the number of steps required to convert a
 ;; balanced tree with n elements to a list? If not, which one grows more slowly?
 
+;; append combines lists by using cons and iterating through the elements in each list, rather than just building
+;; a pair as cons does. The result is that if you are say adding a list of 1 element to a list of n elements,
+;; append will have to go through n + 1 steps.
+
+;; When we call append with the first procedure, we end up having to walk through the left-branch before adding
+;; on the 'entry' for that particular call to tree->list-1. If the tree is balanced, we can assume that's roughly
+;; half the total number of elements in the tree.
+
+;; tree->list-2 will instead cons every element/entry from the tree into the list returned, starting with the right
+;; branch. tree->list-2 will take O(n) steps to complete. tree->list-1 will take at least n steps, plus another
+;; n steps for the number of elements in the left branch.
