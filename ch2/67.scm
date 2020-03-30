@@ -42,17 +42,6 @@
         ((= bit 1) (right-branch branch))
         (else (error "bad bit -- CHOOSE-BRANCH" bit))))
 
-(define (accumulate op initial sequence)
-  (if (null? sequence)
-      initial
-      (op (car sequence)
-          (accumulate op initial (cdr sequence)))))
-
-(define (append seq1 seq2)
-  (accumulate cons
-              seq1
-              seq2))
-
 (define (make-code-tree left right)
   (list left
         right
