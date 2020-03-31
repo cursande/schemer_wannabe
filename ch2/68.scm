@@ -44,14 +44,6 @@
         (append (symbols left) (symbols right))
         (+ (weight left) (weight right))))
 
-(define (make-leaf-set pairs)
-  (if (null? pairs)
-      '()
-      (let ((pair (car pairs)))
-        (adjoin-set (make-leaf (car pair) ; symbol
-                               (cadr pair)) ; frequency
-                    (make-leaf-set (cdr pairs))))))
-
 (define (symbol-present? symbol tree)
   (let ((symbol-list (symbols tree)))
     (define (check-symbol symbol symbol-list)
