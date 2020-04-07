@@ -38,5 +38,14 @@
 ;; divisions’ files for the record of a given employee and return the record. Assume that this procedure
 ;; takes as arguments an employee’s name and a list of all the divisions’ files.
 
+(define (find-employee-record employee division-files)
+  (if (null? division-files)
+      '()
+      (let ((personnel-file (car division-files))
+            (record (get-record employee personnel-file)))
+        (if (record-found? record)
+            record
+            (find-employee-record employee (cdr division-files))))))
+
 ;; d. When Insatiable takes over a new company, what changes must be made in order to incorporate the
 ;; new personnel information into the central system?
