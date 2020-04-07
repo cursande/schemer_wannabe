@@ -49,3 +49,5 @@
 
 ;; d. When Insatiable takes over a new company, what changes must be made in order to incorporate the
 ;; new personnel information into the central system?
+
+;; They would need to create/install a package for the new company so it can become a new division.
